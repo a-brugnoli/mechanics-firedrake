@@ -224,7 +224,7 @@ def integrate(solver, T_end : float, title_file_displacement = None, \
             ii+=1
             PETSc.Sys.Print(f"Iteration number {ii}. Actual time {actual_time:.3f}. Percentage : {time_fraction*100:.1f}%")
             PETSc.Sys.Print(f"Total computing time {computing_time:.1f}. Expected time to end : {expected_remaining_time/60:.1f} (min)")
-            PETSc.Sys.Print(f'Actual time step {time_step_vec[-1]}')
+            PETSc.Sys.Print(f'Actual time step {time_step_vec[-1]:.4f}')
 
             if ii % output_frequency and collect_frames:
 
