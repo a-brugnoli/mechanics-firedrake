@@ -115,14 +115,14 @@ class HamiltonianSaintVenantSolverStaticCondensation:
         A_tensor = fdrk.Tensor(a_form) 
         self.A_blocks = A_tensor.blocks
 
-        A_velocity = self.A_blocks[0, 0] \
-            - self.A_blocks[0, 1] * self.A_blocks[1, 1].inv * self.A_blocks[1, 0]
+        self.A_11_inv = self.A_blocks[1, 1].inv
+
+        A_velocity = self.A_blocks[0, 0] - self.A_blocks[0, 1] * self.A_11_inv * self.A_blocks[1, 0]
 
         b_vector = fdrk.Tensor(l_form)
         self.b_blocks = b_vector.blocks
 
-        b_velocity = self.b_blocks[0] \
-            - self.A_blocks[0, 1] * self.A_blocks[1, 1].inv * self.b_blocks[1]
+        b_velocity = self.b_blocks[0] - self.A_blocks[0, 1] * self.A_11_inv * self.b_blocks[1]
 
         self.velocity_new = fdrk.Function(displ_vectorspace)
         linear_velocity_problem  = fdrk.LinearVariationalProblem(A_velocity, b_velocity, \
