@@ -31,12 +31,13 @@ problem = BendingColumn(n_elem_x=nel_x, n_elem_y=nel_y, n_elem_z=nel_z)
 # problem = BendingColumn(n_elem_x=6, n_elem_y=6, n_elem_z=36)
 # problem = BendingColumn(n_elem_x=12, n_elem_y=12, n_elem_z=72)
 
-# solver = HamiltonianSaintVenantSolver(problem, 
-#                                      pol_degree)
+solver = HamiltonianSaintVenantSolver(problem, 
+                                     pol_degree,
+                                     coeff_cfl=1)
 
 solver_static_cond = HamiltonianSaintVenantSolverStaticCondensation(problem, 
                                     pol_degree,
-                                    coeff_cfl=0.8)
+                                    coeff_cfl=1)
 
 # solver = NonlinearStormerVerletSolver(problem, pol_degree, coeff_cfl=0.18)
 
@@ -51,30 +52,31 @@ if not os.path.exists(directory_results):
 
 output_frequency = 10
 
-# dict_results = integrate(solver, T_end, \
-#                         output_frequency = output_frequency, \
-#                         collect_frames=True)
+dict_results = integrate(solver, T_end, \
+                        output_frequency = output_frequency, \
+                        collect_frames=True)
 
 # time_vector = dict_results['time']
 # energy_vector = dict_results['energy']
-# computing_time = dict_results["computing time"]
 # time_step_vec = dict_results["time steps"]
 # time_frames = dict_results["time frames"]
 
-# list_frames = dict_results["displacement mesh"]
-# list_solution = dict_results["displacement solution"]
-# list_min_max_coords = dict_results["minmax displacement"]
-# lim_x, lim_y, lim_z  = list_min_max_coords
-# print(f"Computing time solver: {computing_time} (s)")
+computing_time = dict_results["computing time"]
+list_frames = dict_results["displacement mesh"]
+list_solution = dict_results["displacement solution"]
+
+list_min_max_coords = dict_results["minmax displacement"]
+lim_x, lim_y, lim_z  = list_min_max_coords
 
 dict_results_static_cond = integrate(solver_static_cond, T_end, \
                         output_frequency = output_frequency, \
                         collect_frames=True)
 
-list_frames_static_cond = dict_results_static_cond["displacement mesh"]
 computing_time_static_cond = dict_results_static_cond["computing time"]
+list_frames_static_cond = dict_results_static_cond["displacement mesh"]
 list_solution_static_cond = dict_results_static_cond["displacement solution"]
 
+print(f"Computing time solver: {computing_time} (s)")
 print(f"Computing time solver static cond: {computing_time_static_cond} (s)")
 
 # error = 0
