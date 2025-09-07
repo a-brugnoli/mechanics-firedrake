@@ -12,7 +12,7 @@ configure_matplotib()
 
 
 problem_id = 3
-solver_id = 4
+solver_id = 1
 pol_degree = 2
 
 match problem_id:

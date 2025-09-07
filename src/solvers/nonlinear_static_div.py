@@ -12,8 +12,7 @@ class NonLinearStaticSolverDiv(NonLinearStatic):
         L2_fe = fdrk.FiniteElement("DG", cell, pol_degree-1)
 
         if str(cell)=="triangle":
-            Hdiv_fe = fdrk.FiniteElement("BDM", cell, pol_degree, 
-                                        variant=f"integral({pol_degree+1})")
+            Hdiv_fe = fdrk.FiniteElement("BDM", cell, pol_degree)
         else:
             Hdiv_fe = fdrk.FiniteElement("RTCF", cell, pol_degree)
 
