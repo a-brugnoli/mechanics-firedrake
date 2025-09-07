@@ -1,6 +1,5 @@
-import firedrake as fdrk
 from abc import ABC, abstractmethod
-from math import pi
+
 
 class Problem(ABC):
     def __init__(self):
@@ -35,26 +34,3 @@ class StaticProblem(Problem):
     def get_natural_bcs(self) -> dict:
         pass
 
-
-class DynamicProblem(Problem):
-    def __init__(self):
-        super().__init__()
-
-
-    @abstractmethod
-    def get_initial_conditions(self):
-        pass
-
-    @abstractmethod
-    def get_forcing(self, time: fdrk.Constant):
-        pass
-
-    
-    @abstractmethod
-    def get_essential_bcs(self, time_ess: fdrk.Constant) -> dict:
-        pass
-
-
-    @abstractmethod
-    def get_natural_bcs(self, time_nat: fdrk.Constant) -> dict:
-        pass

@@ -1,37 +1,6 @@
 import firedrake as fdrk
 import numpy as np
 
-def compute_time_step(domain : fdrk.MeshGeometry, displacement : fdrk.Function, \
-                      parameters, coeff_cfl = 0.8):
-    
-    ndim = domain.topological_dimension()
-    density = parameters["rho"]
-    mu = parameters["mu"]
-    kappa = parameters["kappa"]
-
-    coordinates_mesh = fdrk.SpatialCoordinate(domain)
-    displaced_domain = fdrk.Mesh(fdrk.interpolate(coordinates_mesh + displacement,\
-                                            displacement.function_space()))
-
-    DG0_space = fdrk.FunctionSpace(domain, 'DG', 0)
-    vector_J = fdrk.assemble(fdrk.interpolate(fdrk.det(fdrk.Identity(ndim)\
-                             + fdrk.grad(displacement)), DG0_space)).vector().get_local()
-
-    DG0_space_displaced = fdrk.FunctionSpace(displaced_domain, 'DG', 0)
-    diameters = fdrk.CellSize(displaced_domain)
-    vector_h = fdrk.assemble(fdrk.interpolate(diameters, DG0_space_displaced)).vector().get_local()
-
-    actual_density = density/vector_J
-
-    vector_Jinv = np.reciprocal(vector_J)
-    
-    actual_kappa = kappa * (vector_J + vector_Jinv)/2
-
-    vector_dt = coeff_cfl * vector_h / np.sqrt((actual_kappa + 4/3*mu)/actual_density)
-    delta_t = fdrk.Constant(min(vector_dt))
-
-    return delta_t
-
 
 def compute_min_mesh_size(mesh):
     DG0_space = fdrk.FunctionSpace(mesh, 'DG', 0)
